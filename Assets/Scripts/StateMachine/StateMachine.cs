@@ -1,0 +1,46 @@
+namespace GenshinImpactMovementSystem
+{
+    public abstract class StateMachine
+    {
+        protected IState currentState;
+        public void ChangeState(IState newState)
+        {
+            if(currentState != null) // or currentState?.Exit(); 
+            {
+                currentState.Exit(); 
+            }
+
+            currentState = newState;
+
+            currentState.Enter();
+        }
+
+        public void HandleInput()
+        {
+            currentState?.HandleInput();
+        }
+
+        public void Update()
+        {
+            currentState?.Update();
+        }
+
+        public void PhysicsUpdate()
+        {
+            currentState?.PhysicsUpdate();
+        }
+
+        public void OnAnimationEnterEvent()
+        {
+            currentState?.OnAnimationEnterEvent();
+        }
+        public void OnAnimationExitEvent()
+        {
+            currentState?.OnAnimationExitEvent();
+        }
+        public void OnAnimationTransitionEvent()
+        {
+            currentState?.OnAnimationTransitionEvent();
+        }
+    }
+}
