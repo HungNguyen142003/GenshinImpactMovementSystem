@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "44fdc82c-89ab-49ef-b1a7-efdb65ad87dd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=1)",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -159,6 +168,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e65e1bf5-7094-4eb4-a1e7-120c9c403d46",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a9f59f90-c4db-4209-a2e7-1a8389a1531c",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -13,6 +13,9 @@ namespace GenshinImpactMovementSystem
         public PlayerWalkingState WalkingState { get; }
         public PlayerRunningState RunningState { get; }
         public PlayerSprintingState SprintingState { get; }
+        public PlayerLightStoppingState LightStoppingState { get; }
+        public PlayerMediumStoppingState MediumStoppingState { get; }
+        public PlayerHardStoppingState HardStoppingState { get; }
 
         public PlayerMovementStateMachine(Player player)
         {
@@ -25,6 +28,10 @@ namespace GenshinImpactMovementSystem
             WalkingState = new PlayerWalkingState(this);
             RunningState = new PlayerRunningState(this);
             SprintingState = new PlayerSprintingState(this);
+
+            LightStoppingState = new PlayerLightStoppingState(this);
+            MediumStoppingState = new PlayerMediumStoppingState(this);
+            HardStoppingState = new PlayerHardStoppingState(this);
         }
     }
 }
