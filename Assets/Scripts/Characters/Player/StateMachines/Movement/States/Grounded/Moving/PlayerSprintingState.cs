@@ -13,6 +13,7 @@ namespace GenshinImpactMovementSystem
         private float startTime;
 
         private bool keepSprinting;
+        private bool shouldResetSprintState;
         public PlayerSprintingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
             sprintData = movementData.SprintData;
@@ -25,13 +26,22 @@ namespace GenshinImpactMovementSystem
 
             stateMachine.ReusableData.MovementSpeedModifier = sprintData.SpeedModifier;
 
+            stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
+
+            shouldResetSprintState = true;
+
             startTime = Time.time;
         }
         public override void Exit()
         {
             base.Exit();
 
-            keepSprinting = false;
+            if (shouldResetSprintState)
+            {
+                keepSprinting = false;
+                stateMachine.ReusableData.ShouldSprint = false;
+            }
+
         }
 
         public override void Update()
@@ -87,9 +97,18 @@ namespace GenshinImpactMovementSystem
         {
             stateMachine.ChangeState(stateMachine.HardStoppingState);
         }
+
+        protected override void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            shouldResetSprintState = false;
+
+            base.OnJumpStarted(context);
+        }
         private void OnSprintPerformed(InputAction.CallbackContext context)
         {
             keepSprinting = true;
+
+            stateMachine.ReusableData.ShouldSprint = true;
         }
         #endregion
     }

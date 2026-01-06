@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GenshinImpactMovementSystem
@@ -14,5 +12,6 @@ namespace GenshinImpactMovementSystem
         public void OnAnimationEnterEvent();
         public void OnAnimationExitEvent();
         public void OnAnimationTransitionEvent();
+        public void OnTriggerEnter(Collider collider);
     }
 }

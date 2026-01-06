@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,20 +7,24 @@ namespace GenshinImpactMovementSystem
     public class PlayerMovementState : IState
     {
         protected PlayerMovementStateMachine stateMachine;
+
         protected PlayerGroundedData movementData;
+        protected PlayerAirborneData airborneData;
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine)
         {
             stateMachine = playerMovementStateMachine;
 
             movementData = stateMachine.Player.Data.GroundedData;
+            airborneData = stateMachine.Player.Data.AirborneData;
 
             InitializeData();
         }
 
         private void InitializeData()
         {
-            stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
+            SetBaseRotationData();
         }
+
 
         #region IState Methods
         public virtual void Enter()
@@ -57,6 +62,15 @@ namespace GenshinImpactMovementSystem
 
         public virtual void OnAnimationTransitionEvent()
         {
+        }
+        public virtual void OnTriggerEnter(Collider collider)
+        {
+            if (stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGround(collider);
+
+                return;
+            }
         }
         #endregion
 
@@ -123,6 +137,12 @@ namespace GenshinImpactMovementSystem
         #endregion
 
         #region Reusable Methods
+        protected void SetBaseRotationData()
+        {
+            stateMachine.ReusableData.RotationData = movementData.BaseRotationData;
+
+            stateMachine.ReusableData.TimeToReachTargetRotation = stateMachine.ReusableData.RotationData.TargetRotationReachTime;
+        }
         protected Vector3 GetMovementInputDirection()
         {
             return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
@@ -202,6 +222,12 @@ namespace GenshinImpactMovementSystem
 
             stateMachine.Player.Rigidbody.AddForce(-playerHorizontalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
         }
+        protected void DecelerateVertically()
+        {
+            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
+
+            stateMachine.Player.Rigidbody.AddForce(-playerVerticalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
+        }
 
         protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
         {
@@ -210,6 +236,18 @@ namespace GenshinImpactMovementSystem
             Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
 
             return playerHorizontalMovement.magnitude > minimumMagnitude;
+        }
+
+        protected bool IsMovingUp(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y > minimumVelocity;
+        }
+        protected bool IsMovingDown(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y < -minimumVelocity;
+        }
+        protected virtual void OnContactWithGround(Collider collider)
+        {
         }
         #endregion
 
