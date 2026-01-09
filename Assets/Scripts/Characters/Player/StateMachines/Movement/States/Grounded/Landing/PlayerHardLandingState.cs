@@ -11,11 +11,11 @@ namespace GenshinImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
+            stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
             base.Enter();
 
             stateMachine.Player.Input.PlayerActions.Movement.Disable();
-
-            stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             ResetVelocity();
         }
@@ -25,6 +25,17 @@ namespace GenshinImpactMovementSystem
             base.Exit();
 
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
+        }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
         }
 
         public override void OnAnimationExitEvent()

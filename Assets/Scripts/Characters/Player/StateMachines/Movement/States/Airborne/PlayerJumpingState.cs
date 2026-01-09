@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GenshinImpactMovementSystem
 {
@@ -86,6 +87,8 @@ namespace GenshinImpactMovementSystem
 
             if (shouldKeepRotating)
             {
+                UpdateTargetRotation(GetMovementInputDirection());
+
                 jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 
@@ -123,5 +126,11 @@ namespace GenshinImpactMovementSystem
             stateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
         #endregion
+
+        #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+        }
+        #endregion 
     }
 }
