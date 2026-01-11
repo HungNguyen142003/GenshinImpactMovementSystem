@@ -16,9 +16,18 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
+
             UpdateShouldSprintState();
 
             UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
         }
 
         public override void PhysicsUpdate()
@@ -164,6 +173,13 @@ namespace GenshinImpactMovementSystem
         protected virtual void OnFall()
         {
             stateMachine.ChangeState(stateMachine.FallingState);
+        }
+
+        protected override void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            UpdateTargetRotation(GetMovementInputDirection());
+
+            base.OnMovementPerformed(context);
         }
         #endregion
 
